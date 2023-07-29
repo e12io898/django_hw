@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
+import re
 
 DATA = {
     'omlet': {
@@ -15,16 +16,29 @@ DATA = {
         'колбаса, ломтик': 1,
         'сыр, ломтик': 1,
         'помидор, ломтик': 1,
-    },
-    # можете добавить свои рецепты ;)
+    }
 }
 
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }
+def home_view(request):
+    """ Стартовая страница """
+    template_name = 'calculator/home.html'
+    pages = {
+        'Омлет': 'omlet/?servings=1',
+        'Паста': 'pasta/?servings=1',
+        'Бутерброд': 'buter/?servings=1'
+    }
+    context = {'pages': pages}
+    return render(request, template_name, context)
+
+
+def recipes(request, recipe):
+    """ Отображает количество ингредиентов. """
+    servings = request.GET.get('servings', 1)
+    ingredients = DATA.get(recipe, {}).copy()
+    if recipe in DATA:
+        for ingr in ingredients:
+            ingredients[ingr] *= int(servings)
+        context = {'recipe': ingredients}
+    else:
+        context = {}
+    return render(request, 'calculator/index.html', context)
