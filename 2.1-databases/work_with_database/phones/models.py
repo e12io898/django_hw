@@ -8,4 +8,4 @@ class Phone(models.Model):
     price = models.IntegerField()
     release_date = models.DateField()
     lte_exist = models.BooleanField()
-    slug = models.SlugField(max_length=50, db_column='name')
+    slug = models.SlugField(max_length=50, unique=True)
