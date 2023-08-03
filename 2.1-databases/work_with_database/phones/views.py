@@ -7,6 +7,7 @@ def index(request):
 
 
 def show_catalog(request):
+    """ Общий каталог с возможностью сортировки. """
     template = 'catalog.html'
     sort_param = {
         'name': 'name',
@@ -20,6 +21,7 @@ def show_catalog(request):
 
 
 def show_product(request, slug):
+    """ Описание конкретного товара. """
     template = 'product.html'
     phone = Phone.objects.filter(slug=slug)[0]
     context = {'phone': phone}

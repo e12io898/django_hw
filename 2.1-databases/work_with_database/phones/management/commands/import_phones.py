@@ -10,6 +10,7 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
+        """ Заполнение БД из шаблона csv. """
         with open('phones.csv', 'r') as file:
             phones = list(csv.DictReader(file, delimiter=';'))
 
