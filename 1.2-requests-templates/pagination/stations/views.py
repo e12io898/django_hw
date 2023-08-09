@@ -17,11 +17,11 @@ def index(request):
 def bus_stations(request):
     current_page = int(request.GET.get('page', 1))
     paginator = Paginator(DATA, 10)
-    comtent = paginator.get_page(current_page)
+    content = paginator.get_page(current_page)
     page = Page(DATA, current_page, paginator)
 
     context = {
-        'bus_stations': comtent,
+        'bus_stations': content,
         'page': page,
     }
     return render(request, 'stations/index.html', context)
