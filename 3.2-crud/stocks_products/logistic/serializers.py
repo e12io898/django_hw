@@ -1,43 +1,52 @@
 from rest_framework import serializers
 
+from .models import Product, StockProduct, Stock
+
 
 class ProductSerializer(serializers.ModelSerializer):
-    # настройте сериализатор для продукта
-    pass
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'description']
 
 
 class ProductPositionSerializer(serializers.ModelSerializer):
-    # настройте сериализатор для позиции продукта на складе
-    pass
+    class Meta:
+        model = StockProduct
+        fields = ['product', 'quantity', 'price']
+
 
 
 class StockSerializer(serializers.ModelSerializer):
     positions = ProductPositionSerializer(many=True)
 
-    # настройте сериализатор для склада
+    class Meta:
+        model = Stock
+        fields = ['id', 'address', 'positions']
 
     def create(self, validated_data):
-        # достаем связанные данные для других таблиц
         positions = validated_data.pop('positions')
 
-        # создаем склад по его параметрам
         stock = super().create(validated_data)
 
-        # здесь вам надо заполнить связанные таблицы
-        # в нашем случае: таблицу StockProduct
-        # с помощью списка positions
+        for pos in positions:
+            new_pos = StockProduct(stock=stock, **pos)
+            new_pos.save()
 
         return stock
 
     def update(self, instance, validated_data):
-        # достаем связанные данные для других таблиц
         positions = validated_data.pop('positions')
 
-        # обновляем склад по его параметрам
+        pos_list = (instance.positions).all()
+        pos_list = list(pos_list)
+
         stock = super().update(instance, validated_data)
 
-        # здесь вам надо обновить связанные таблицы
-        # в нашем случае: таблицу StockProduct
-        # с помощью списка positions
+        for position in positions:
+            pos_update = pos_list.pop(0)
+            pos_update.product = position.get('product', pos_update.product)
+            pos_update.quantity = position.get('quantity', pos_update.quantity)
+            pos_update.price = position.get('price', pos_update.price)
+            pos_update.save()
 
         return stock
