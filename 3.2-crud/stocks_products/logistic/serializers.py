@@ -28,16 +28,18 @@ class StockSerializer(serializers.ModelSerializer):
 
         stock = super().create(validated_data)
 
+        # Создание записей в связанной таблице StockProduct:
         for pos in positions:
             new_pos = StockProduct(stock=stock, **pos)
             new_pos.save()
 
         return stock
 
+    # Обновление записей в связанной таблице StockProduct:
     def update(self, instance, validated_data):
         positions = validated_data.pop('positions')
 
-        pos_list = (instance.positions).all()
+        pos_list = instance.positions.all()
         pos_list = list(pos_list)
 
         stock = super().update(instance, validated_data)
