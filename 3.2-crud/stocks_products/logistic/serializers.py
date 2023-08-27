@@ -35,7 +35,6 @@ class StockSerializer(serializers.ModelSerializer):
 
         return stock
 
-    # Обновление записей в связанной таблице StockProduct:
     def update(self, instance, validated_data):
         positions = validated_data.pop('positions')
 
@@ -44,6 +43,7 @@ class StockSerializer(serializers.ModelSerializer):
 
         stock = super().update(instance, validated_data)
 
+        # Обновление записей в связанной таблице StockProduct:
         for position in positions:
             pos_update = pos_list.pop(0)
             pos_update.product = position.get('product', pos_update.product)
