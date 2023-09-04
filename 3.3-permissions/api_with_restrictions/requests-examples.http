@@ -31,6 +31,7 @@ Authorization: Token 902ef055a9ac93f18327f1f9c45ab059f1a62c7d
 
 ###
 
+
 # фильтрация по создателю +
 GET {{baseUrl}}/advertisements/?creator=3
 Content-Type: application/json
