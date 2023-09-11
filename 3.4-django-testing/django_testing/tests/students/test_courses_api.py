@@ -61,7 +61,7 @@ def test_courses(client, course_factory):
 @pytest.mark.django_db
 def test_filter_id(client, course_factory):
     courses = course_factory(_quantity=10)
-    indexes = [i.id for i in courses]
+    indexes = [item.id for item in courses]
     index = random.choice(indexes)
 
     response = client.get(f'/api/v1/courses/?id={index}')
