@@ -19,13 +19,12 @@ from rest_framework.routers import DefaultRouter
 
 from students.views import CoursesViewSet
 
-router = DefaultRouter()
-router.register("courses", CoursesViewSet, basename="courses")
-
-api_url = 'api/v1/'
 courses_rout = 'courses'
+
+router = DefaultRouter()
+router.register(courses_rout, CoursesViewSet, basename=courses_rout)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(api_url, include(router.urls)),
+    path('api/v1/', include(router.urls)),
 ]

@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from model_bakery import baker
 
+from django_testing.urls import courses_rout
 from students.models import Student, Course
 
 # Фикстуры:
@@ -37,7 +38,7 @@ def test_course(client, course_factory):
     course = course_factory(_quantity=1)
     index = course[0].id
 
-    url = reverse('courses-detail', args=[index])
+    url = reverse(f'{courses_rout}-detail', args=[index])
     response = client.get(url)
 
     # response = client.get(f'/api/v1/courses/{index}/')
