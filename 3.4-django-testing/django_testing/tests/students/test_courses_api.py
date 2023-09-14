@@ -1,5 +1,6 @@
 import random
 import pytest
+from django.urls import reverse
 from rest_framework.test import APIClient
 from model_bakery import baker
 
@@ -36,7 +37,10 @@ def test_course(client, course_factory):
     course = course_factory(_quantity=1)
     index = course[0].id
 
-    response = client.get(f'/api/v1/courses/{index}/')
+    url = reverse('courses-detail', args=[index])
+    response = client.get(url)
+
+    # response = client.get(f'/api/v1/courses/{index}/')
     data = response.json()
 
     assert response.status_code == 200
